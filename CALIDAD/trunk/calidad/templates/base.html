@@ -2,6 +2,9 @@
 
 {% block title %}Ejemplo de plantilla con bootstrap{% endblock %}
 
+{# Cargamos el modulo utils de Flask-Bootstrap que formatea los mensajes flash de Flask
+	con un aspecto mas amigable al estilo bootstrap  #}
+{% import "bootstrap/utils.html" as utils %}
 {% import "bootstrap/fixes.html" as fixes %}
 
 {% block head %}
@@ -26,3 +29,6 @@
 {% block navbar %}
 	{{nav.frontend_top.render()}}
 {% endblock %}
+
+
+

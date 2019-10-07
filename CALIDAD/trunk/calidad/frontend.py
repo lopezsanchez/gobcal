@@ -4,7 +4,7 @@ Se define aqui el contenido de la parte de frontend a modo de blueprint
 from flask import Blueprint, render_template, flash, redirect, url_for
 from markupsafe import escape
 
-from .gobernanza.formularios import ProyectosForm
+from .gobernanza.formularios import ProyectoForm
 
 frontend = Blueprint('frontend', __name__)
 
@@ -19,7 +19,7 @@ def index():
 @frontend.route('/proyectos/', methods=('GET', 'POST'))
 def proyectos_form():
     
-    form = ProyectosForm()
+    form = ProyectoForm()
  
     if form.validate_on_submit():
         # We don't have anything fancy in our application, so we are just

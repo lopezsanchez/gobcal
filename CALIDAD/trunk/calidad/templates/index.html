@@ -1,16 +1,11 @@
 {% extends "base.html" %}
 
-{# Cargamos el modulo utils de Flask-Bootstrap que formatea los mensajes flash de Flask
-	con un aspecto más amigable al estilo bootstrap  #}
-{% import "bootstrap/utils.html" as utils %}
-
 {% block title %}P&aacute;gina de inicio{% endblock %}
 
 {# Inside the ``content`` is where you should place most of your own stuff.
    This will keep scripts at the page end and a navbar you add on later
    intact. #}
 {% block content %}
-  <div class="container">
   {% with messages = get_flashed_messages(with_categories=True) %}
   {% if messages %}
     <div class="row">
@@ -20,6 +15,7 @@
     </div>
   {% endif %}
   {% endwith %}
+  <div class="container">
     <div class="jumbotron">
       <h1 align="center">Gobierno y calidad de datos</h1>
       <p>Herramienta de Gobierno y calidad de datos para el an&aacute;lisis de datos
@@ -32,32 +28,3 @@
    </div>
 {% endblock %}
 
-
-
-<!--
-<!DOCTYPE html>
-<html lang="es">
-	<head>
-		<meta charset="UTF-8" />
-		<title>Inicio</title>
-	</head>
-	<body>
-		<h1>&Aacute;REA DE AN&Aacute;LISIS DE DATOS</h1>
-		
-		<form action="nuevoproyecto" method="post"> 
-			<input type="button" value="NUEVO PROYECTO" />
-		</form>
-		<form action="listaproyectos" method="post"> 
-			<input type="button" value="CARGAR PROYECTOS" />
-		</form>
-	</body>
-</html>
-
--->
-
-<!--
-			<button type="button" name="opcion" value="datosproyecto">NUEVO PROYECTO</button> 
-			<button type="button" name="opcion" value="listaproyectos">CARGAR PROYECTOS</button>
-			<input type="button" value="NUEVO PROYECTO" onclick="eventoBoton(nuevoproyecto);"  /> 
-			<input type="button" value="CARGAR PROYECTOS" onclick="eventoBoton(listadoproyectos);" /> 
- -->

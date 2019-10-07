@@ -1,30 +1,23 @@
 {% extends "base.html" %}
 
+{% block title %}Proyectos de ana&aacute;lisis{% endblock %}
+
 {% block content %}
+  {% with messages = get_flashed_messages(with_categories=True) %}
+  {% if messages %}
+    <div class="row">
+      <div class="col-md-12">
+        {{utils.flashed_messages(messages)}}
+      </div>
+    </div>
+  {% endif %}
+  {% endwith %}
         <div class="jumbotron" style="overflow: auto; max-height: 80vh">
-            <div class="table-responsive">
-                <table class="table" id="proyectos">
-                    <thead>
-                        <tr>
-                            <th scope="col">Flight</th>
-                            <th scope="col">Destination</th>
-                            <th scope="col">Check in</th>
-                            <th scope="col">Depature</th>
-                            <th scope="col">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for proyecto in proyectos %}
-                        <tr id={{ flight.id }}>
-                            <th scope="row">{{ flight.flight }}</th>
-                            <td> {{flight.destination }} </td>
-                            <td> {{ flight.check_in }} </td>
-                            <td> {{ flight.depature }} </td>
-                            <td> {{ flight.status }} </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+            <h2 align="center">Proyectos registrados</h2>
+            <div class="table-responsive"> 
+				{{ datos | safe }} 
             </div>
+            <button class="btn btn-lg btn-default" type="submit">Ver</button>
+            <input class="btn btn-primary btn-block active" type="button" value="Nuevo">
         </div>
  {% endblock %}

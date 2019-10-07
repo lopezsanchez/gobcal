@@ -12,8 +12,9 @@ class ContactoForm(Form):
 class ProyectoForm(FlaskForm):
     nombre = StringField("Nombre del proyecto:", validators=[InputRequired(), Length(max=30)])
     organismo = StringField("Organismo peticionario:", validators=[InputRequired(), Length(max=50)])
-    contactos = FieldList(FormField(ContactForm), min_entries=0, max_entries=None)
+    contactos = FieldList(FormField(ContactoForm), min_entries=0, max_entries=None)
     fuentes = StringField("Fichero de or&iacute;genes de datos:")
     diccionariodatos = StringField("Diccionario de datos:")
+    descripcion = StringField("Descripci&oacute;n")
     
     

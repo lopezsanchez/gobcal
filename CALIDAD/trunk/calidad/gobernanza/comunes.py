@@ -13,7 +13,7 @@ def abrir_fichero(ruta, tipo):
         else:
             pass
     except FileNotFoundError:
-        open(ruta, "w").close()
+        open(ruta, "w",  encoding="utf-8").close()
     return diccionario
 
 # Guarda un diccionario en un fichero
@@ -25,7 +25,7 @@ def guardar_fichero(diccionario, ruta, tipo):
     else:
         pass
     with open(ruta, "wb") as f:
-        f.write(contenido).close()
+        f.write(contenido, encoding="utf-8").close()
         
         
 # def leer_json(file, intKey=False):

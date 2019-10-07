@@ -14,12 +14,13 @@ class Proyecto():
     # Todo proyecto tiene al menos un nombre que le identifique
     __proyecto_key = ""
     # Separamos el resto de parámetros para facilitar la modificacion del modelo
-    __proyecto_param = {}.fromkeys(["organismo", "contactos", "ficherofuentes", "diccionariodatos", "observaciones"], "")
+    __proyecto_param = {}.fromkeys(["proyecto", "organismo", "contactos", "ficherofuentes", "diccionariodatos", "descripcion"], "")
               
     # Función de instanciación
     def __init__(self, nombre_proyecto):
-        self ={__proyecto_key : __proyecto_param}
-#        self.update(__proyecto_param)
+        self ={__proyecto_key : nombre_proyecto}
+        self.update(__proyecto_param)
+        self["proyecto"] = nombre_proyecto
         # Contactos es un array para poder incluir varios contactos
         self[__proyecto_key]["contactos"] = []
         
