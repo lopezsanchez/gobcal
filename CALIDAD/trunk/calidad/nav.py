@@ -16,9 +16,13 @@ nav.register_element('frontend_top', Navbar(
    # icono,
     nombre_app,
     View('Inicio', 'frontend.index'),
-    View('Proyectos', 'frontend.proyectos_form'),
     Subgroup(
-        'Documentos',
+        'Gobierno',
+        View('Proyectos', 'frontend.proyectos_form'),
+        View('Lista de proyectos', 'frontend.proyectos_form')),
+#    View('Proyectos', 'frontend.proyectos_form'),
+    Subgroup(
+        'Calidad',
         Link('Flask-Bootstrap', 'http://pythonhosted.org/Flask-Bootstrap'),
         Link('Flask-AppConfig', 'https://github.com/mbr/flask-appconfig'),
         Link('Flask-Debug', 'https://github.com/mbr/flask-debug'),
@@ -29,4 +33,4 @@ nav.register_element('frontend_top', Navbar(
         Link('Components', 'http://getbootstrap.com/components/'),
         Link('Javascript', 'http://getbootstrap.com/javascript/'),
         Link('Customize', 'http://getbootstrap.com/customize/'), ),
-    Text('Using Flask-Bootstrap {}'.format(FLASK_BOOTSTRAP_VERSION)), ))
+    Text('Construido con Flask-Bootstrap {}'.format(FLASK_BOOTSTRAP_VERSION)), ))

@@ -12,12 +12,45 @@
     </div>
   {% endif %}
   {% endwith %}
+    <div class="container">
         <div class="jumbotron" style="overflow: auto; max-height: 80vh">
+        	<h2 align="center">Nuevo proyecto</h2>
+        	<form method="POST" id="nuevo_proy">
+        		<div class="form-group">
+        			<input type="text" class="form-control" name="proyecto" placeholder="Nombre del proyecto">
+        		</div>
+        		<div class="form-group">
+        			<input type="text" class="form-control" name="organismo" placeholder="Organismo peticionario">
+        		</div>
+        		<div class="form-group">
+        			<input type="text" class="form-control" name="descripcion" placeholder="Descripci&oacute;n del proyecto" >
+        		</div>
+            	<input class="btn btn-primary btn-lg active" type="button" value="Dar de alta">        		
+        	</form>
+        
             <h2 align="center">Proyectos registrados</h2>
-            <div class="table-responsive"> 
-				{{ datos | safe }} 
+            <div class="table-responsive">
+            	<table class="table" id="proyectos">
+            		<thead>
+            			<tr>
+            				<th scope="col">Proyecto</th>
+            				<th scope="col">Organismo</th>
+            				<th scope="col">Descripci&oacute;n</th>
+            			</tr>
+            		</thead>
+            		<tbody>
+            		  {% from "_formcoms.html" import render_field %}
+            		  {% for proyecto in proyectos %}
+            			<tr id={{ proyecto.proyecto }}>
+            				<th scope="row">{{ render_field(proyecto.proyecto) }}</th>
+            				<td> {{ render_field(proyecto.organismo) }}</td>
+            				<td> {{ render_field(proyecto.descripcion) }}</td>	
+            				<td> <a href="/editar/{{ proyecto.proyecto }}">Editar</a></td>
+            			</tr>
+            		  {% endfor %}
+            		</tbody>
+            	</table> 
             </div>
-            <button class="btn btn-lg btn-default" type="submit">Ver</button>
-            <input class="btn btn-primary btn-block active" type="button" value="Nuevo">
         </div>
+    </div>
  {% endblock %}

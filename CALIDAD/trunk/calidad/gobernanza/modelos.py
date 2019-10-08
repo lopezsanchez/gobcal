@@ -14,13 +14,13 @@ class Proyecto():
     # Todo proyecto tiene al menos un nombre que le identifique
     __proyecto_key = ""
     # Separamos el resto de parámetros para facilitar la modificacion del modelo
-    __proyecto_param = {}.fromkeys(["proyecto", "organismo", "contactos", "ficherofuentes", "diccionariodatos", "descripcion"], "")
+    __proyecto_param = {}.fromkeys(["nombre_proy", "organismo", "contactos", "ficherofuentes", "diccionariodatos", "descripcion"], "")
               
     # Función de instanciación
     def __init__(self, nombre_proyecto):
         self ={__proyecto_key : nombre_proyecto}
         self.update(__proyecto_param)
-        self["proyecto"] = nombre_proyecto
+        self["nombre_proy"] = nombre_proyecto
         # Contactos es un array para poder incluir varios contactos
         self[__proyecto_key]["contactos"] = []
         
@@ -42,7 +42,7 @@ class Proyecto():
             return Proyecto(nombre_proyecto)
         
 
-    def guardar_proyecto(self, __fichero_proyectos):
+    def guardar_proyecto(self):
         proyectos = abrir_fichero(__fichero_proyectos, "json")
         # Añadimos el proyecto a la lista de proyectos
         # La clave es el nombre del proyecto y el valor el propio objeto proyecto

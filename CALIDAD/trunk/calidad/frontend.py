@@ -1,10 +1,16 @@
+# -*- coding: UTF-8 -*-
+
 """
 Se define aqui el contenido de la parte de frontend a modo de blueprint
 """
-from flask import Blueprint, render_template, flash, redirect, url_for
+import pandas as pd
+
+from flask import Blueprint, render_template, flash, redirect, url_for, request, session
 from markupsafe import escape
 
+from .gobernanza.controladores import listar_proyectos
 from .gobernanza.formularios import ProyectoForm
+from .gobernanza.modelos import Proyecto
 
 frontend = Blueprint('frontend', __name__)
 
@@ -19,23 +25,17 @@ def index():
 @frontend.route('/proyectos/', methods=('GET', 'POST'))
 def proyectos_form():
     
-    form = ProyectoForm()
+    proyectos = listar_proyectos()
+    form = ProyectoForm(request.form)
  
     if form.validate_on_submit():
-        # We don't have anything fancy in our application, so we are just
-        # flashing a message when a user completes the form successfully.
-        #
-        # Note that the default flashed messages rendering allows HTML, so
-        # we need to escape things if we input user values:
-        flash('Hello, {}. You have successfully signed up'
-              .format(escape(form.name.data)))
- 
-        # In a real application, you may wish to avoid this tedious redirect.
-        return redirect(url_for('frontend.index'))
-    
-    
-    
-    return render_template('gobernanza/proyectos.html', form=form)
+        proyecto = buscar_proyecto(form.proyecto)
+        proyecto["nombre_proy"] = form.proyecto
+        proyecto["organismo"] = form.organismo
+        proyecto["descripcion"] = form.descripcion
+        proyecto.guardar_proyecto()
+           
+    return render_template('gobernanza/proyectos.html', table=proyectos)
 
 
     

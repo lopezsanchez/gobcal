@@ -12,16 +12,15 @@ mod_gob = Blueprint('gob', __name__, template_folder='/gobernanza',
                     url_prefix='/gobiernodatos')
       
 # Listado de los proyectos existentes
-@mod_gob.route('/proyectos/', methods=['GET','POST'])
-def listaproyectos():
+def listar_proyectos():
     lista_proyectos = __mostrar_proyectos()
-    
+     
     #tabla_proyectos = lista_proyectos.T
     #return render_template("proyectos.html", datos=tabla_proyectos.to_html())
-    return render_template("proyectos.html", datos=lista_proyectos.to_html())
+    #return render_template("proyectos.html", datos=lista_proyectos.to_html())
+    return lista_proyectos.T
     
 # Visualización y entrada de datos de proyecto
-@mod_gob.route('/proyecto/')
 def datosproyecto():
     form = ProyectoForm(request.form)
     
@@ -43,7 +42,7 @@ def datosproyecto():
                            
 # Devuelve un dataframe con los datos de los proyectos
 def __mostrar_proyectos():
-    proyectos = abrir_fichero(__fichero_proyectos, "json")
+    proyectos = abrir_fichero("/proyectos/proyectos.json", "json")
     proyectos_df = pd.DataFrame.from_dict(proyectos)
     return proyectos_df  
     
