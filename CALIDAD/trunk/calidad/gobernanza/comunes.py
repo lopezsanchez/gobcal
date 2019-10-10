@@ -1,30 +1,38 @@
 import pandas as pd
 import os
+import json
+from pathlib import Path
+import codecs
+
+path: Path = Path("D:/datos")
+
 
 # Abre un fichero y devuelve un diccionario asociado a sus datos
-def abrir_fichero(ruta, tipo):
+def abrir_fichero(fichero, tipo):
     diccionario = {}
+    filename: Path = Path(fichero)
     try:
         if tipo == "json":
-            js = pd.read_json(ruta)
-            diccionario = json.loads(js)
+            with codecs.open(path/filename, 'r', 'utf-8-sig') as f:
+                diccionario = json.load(f)
         elif tipo == "csv":
             pass
         else:
             pass
     except FileNotFoundError:
-        open(ruta, "w",  encoding="utf-8").close()
+        codecs.open(path/filename, 'rw',  'utf-8-sig').close()
     return diccionario
 
 # Guarda un diccionario en un fichero
-def guardar_fichero(diccionario, ruta, tipo):
+def guardar_fichero(diccionario, fichero, tipo):
+    filename: Path = Path(fichero)
     if tipo == "json":
         contenido = json.dumps(diccionario)
     elif tipo == "csv":
         pass
     else:
         pass
-    with open(ruta, "wb") as f:
+    with open(path/filename, "wb") as f:
         f.write(contenido, encoding="utf-8").close()
         
         
