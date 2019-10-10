@@ -37,7 +37,5 @@ def proyectos_form():
     else:       
         #return render_template('gobernanza/proyectos.html', table=proyectos)
         return render_template('gobernanza/proyectos.html', tables=[proyectos.to_html(classes='data')], title=proyectos.columns.values)
-
-
     
                 

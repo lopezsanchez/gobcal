@@ -18,7 +18,7 @@ def abrir_fichero(fichero, tipo):
         elif tipo == "csv":
             pass
         else:
-            pass
+            pass 
     except FileNotFoundError:
         codecs.open(path/filename, 'rw',  'utf-8-sig').close()
     return diccionario
