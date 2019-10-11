@@ -35,7 +35,6 @@ def proyectos_form():
         proyecto["descripcion"] = form.descripcion
         proyecto.guardar_proyecto()
     else:       
-        #return render_template('gobernanza/proyectos.html', table=proyectos)
-        return render_template('gobernanza/proyectos.html', tables=[proyectos.to_html(classes='data')], title=proyectos.columns.values)
-    
+        return render_template('gobernanza/proyectos.html', table=proyectos)
+       # return render_template('gobernanza/proyectos.html', tables=[proyectos.to_html(classes='data')], title=proyectos.columns.values)
                 

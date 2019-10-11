@@ -1,28 +1,51 @@
 # -*- coding: UTF-8 -*-
+from calidad import db
+#import pandas as pd
+#from .comunes import abrir_fichero, guardar_fichero
+# https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iv-database
 
-import pandas as pd
-from .comunes import abrir_fichero, guardar_fichero
-
-      
 """
+Define un modelo base para que el resto de tablas lo hereden
+"""
+class Base(db.Model):
+    __abstract__ = True 
+    
+    id = db.Column(db.Integer, primary_key = True)
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+
+"""    
 Define el modelo de Proyecto
 """
-class Proyecto():
-     
-    # Path del fichero json de proyectos
-    __fichero_proyectos = "/proyectos/proyectos.json"
-    # Todo proyecto tiene al menos un nombre que le identifique
-    __proyecto_key = ""
-    # Separamos el resto de parámetros para facilitar la modificacion del modelo
-    __proyecto_param = {}.fromkeys(["nombre_proy", "organismo", "contactos", "ficherofuentes", "diccionariodatos", "descripcion"], "")
-              
+class Proyecto(Base):
+    
+    __tablename__ = 'proyecto'
+    
+    # Datos del proyecto
+    nombre = db.Column(db.String(128), nullable=False, unique=True)
+    organismo = db.Column(db.String(256), nullable=False)
+    contactos = db.relationship('Contacto', backref='contacto', lazy='dynamic')
+    ficherofuentes = db.Column(db.String(1024))
+    diccionariodatos = db.Column(db.String(1024))
+    descripcion = db.Column(db.String(4096), nullable=False)
+  
     # Función de instanciación
-    def __init__(self, nombre_proyecto):
-        self ={__proyecto_key : nombre_proyecto}
-        self.update(__proyecto_param)
-        self["nombre_proy"] = nombre_proyecto
-        # Contactos es un array para poder incluir varios contactos
-        self[__proyecto_key]["contactos"] = []
+    def __init__(self, nombre, organismo, descripcion):
+        self.nombre = nombre
+        self.organismo = organismo
+        self.ficherofuentes = ficherofuentes
+        self.diccionariodatos = diccionariodatos
+        self.descripcion = descripcion
+        
+        def __init__(self, flight=None, destination=None, check_in=None, depature=None, status=None):
+            self.flight = flight
+            self.destination = destination
+            self.check_in = check_in
+            self.depature = depature
+            self.status = status
+            
+        
+
         
     # Añade los datos de un contacto al proyecto            
     def add_contacto(self, Contacto):
@@ -58,24 +81,23 @@ Define el modelo de Contacto
 """
 class Contacto():
 
-    # Todo contacto tiene al menos un nombre
-    __contacto = {"nombre":""}
-    # Separamos el resto de parámetros para facilitar la modificacion del modelo
-    __contacto_param = {}.fromkeys(["email", "telefono", "movil"], "")
-        
-    # Función de instanciación    
-    def __init__(self, nombre_contacto):
-        self.__contacto["nombre"] = "nombre_contacto" 
-        self.__contacto.update(contacto_param)
+    __tablename__ = 'contacto'
     
-    # Establecemos el resto de parametros del contacto
-    def setParams(self, dic_parametros):
-        for key in dic_parametros:
-            self.__contacto[key] = dic_parametros[key].value()
+    # Datos del contacto
+    nombre = db.Column(db.String(64), nullable=False)
+    apellidos = db.Column(db.String(256), nullable=False)
+    email = db.Column(db.String(120))
+    telefono = db.Column(db.String(9))
+    movil = db.Column(db.String(9))
     
-    # Encapsulamos para facilitar mantenimiento          
-    def getContactoParam(self, key):
-        return self.__contacto[key].value()
+    # Función de instanciación
+    def __init__(self, nombre=None, apellidos=None, email, telefono, movil):
+        self.nombre = nombre
+        self.apellidos = apellidos
+        self.email = email
+        self.telefono = telefono
+        self.movil = movil
+        proyecto_id = db.Column(db.Integer, db.ForeignKey('proyecto.id'))
         
     def __repr__(self):
         return '<Contacto %r>' % (self.nombre)

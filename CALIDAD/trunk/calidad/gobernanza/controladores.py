@@ -20,7 +20,7 @@ def listar_proyectos():
     #return render_template("proyectos.html", datos=tabla_proyectos.to_html())
     #return render_template("proyectos.html", datos=lista_proyectos.to_html())
     #return lista_proyectos.T
-    return lista_proyectos 
+    return lista_proyectos.T
     
 # Visualización y entrada de datos de proyecto
 # def datosproyecto():

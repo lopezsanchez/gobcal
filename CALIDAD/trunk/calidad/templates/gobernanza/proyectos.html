@@ -40,18 +40,18 @@
             				<th scope="col">Descripci&oacute;n</th>
             			</tr>
             		</thead>
-            		<tbody>
+            		<tbody> <!-- 
 {% for proyecto in proyectos}
 	{{ titles[loop.index]  }}
-{% endfor}
-<!--						{% for proyecto in proyectos %}
+{% endfor} -->
+					{% for proyecto in proyectos %}
             			<tr id={{ proyecto.proyecto }}>
             				<th scope="row">{{ render_field(proyecto.proyecto) }}</th>
             				<td> {{ render_field(proyecto.organismo) }}</td>
             				<td> {{ render_field(proyecto.descripcion) }}</td>	
             				<td> <a href="/editar/{{ proyecto.proyecto }}">Editar</a></td>
             			</tr>
-            		  	{% endfor %} -->
+            		  	{% endfor %} 
             		</tbody>
             	</table> 
             </div>
