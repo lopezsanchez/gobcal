@@ -45,7 +45,11 @@
 	{{ titles[loop.index]  }}
 {% endfor} -->
 					{% for proyecto in proyectos %}
+<<<<<<< HEAD
             			<tr id={{ proyecto.id }}>
+=======
+            			<tr id={{ proyecto.proyecto }}>
+>>>>>>> refs/heads/withSQLlite
             				<th scope="row">{{ render_field(proyecto.proyecto) }}</th>
             				<td> {{ render_field(proyecto.organismo) }}</td>
             				<td> {{ render_field(proyecto.descripcion) }}</td>	

@@ -35,6 +35,10 @@ def proyectos_form():
         proyecto["descripcion"] = form.descripcion
         proyecto.guardar_proyecto()
     else:       
+<<<<<<< HEAD
         return render_template('gobernanza/proyectos.html', form=form)
+=======
+        return render_template('gobernanza/proyectos.html', table=proyectos)
+>>>>>>> refs/heads/withSQLlite
        # return render_template('gobernanza/proyectos.html', tables=[proyectos.to_html(classes='data')], title=proyectos.columns.values)
                 
