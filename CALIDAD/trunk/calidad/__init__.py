@@ -2,13 +2,11 @@
 import logging
 
 from flask import Flask, render_template, request, g
-from flask_appbuilder import AppBuilder, SQLA
+from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from jinja2 import TemplateNotFound
 from .nav import nav
 from .frontend import frontend
-#from nt import abort
-#from . import vistas, controladores, modelos
 
 """
  Configurar logs
@@ -55,7 +53,7 @@ nav.init_app(calidad)
 """ 
 Persistencia de datos
 """
-db = SQLA(calidad)
+db = SQLAlchemy(calidad)
 
 # """
 # Objeto appbuilder
@@ -79,7 +77,8 @@ def main():
     except TemplateNotFound:
         #not_found()
         return render_template('404.html')
-    
+
+  
 """
 Importación de  módulos de aplicación utilizando sus variables de gestión de blueprints (p. ej. mod_gob)
 """

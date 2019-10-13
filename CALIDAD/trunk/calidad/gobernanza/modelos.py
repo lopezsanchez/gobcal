@@ -1,81 +1,113 @@
 # -*- coding: UTF-8 -*-
 
-import pandas as pd
-from .comunes import abrir_fichero, guardar_fichero
+from calidad import db
+#import pandas as pd
+#from .comunes import abrir_fichero, guardar_fichero
 
-      
+# many to many with sqlalchemy https://flask-sqlalchemy.palletsprojects.com/en/2.x/models/
+# sqlalchemy API https://flask-sqlalchemy.palletsprojects.com/en/2.x/api/
+
 """
+Define un modelo base para que el resto de tablas lo hereden
+"""
+class Base(db.Model):
+    __abstract__ = True 
+    
+    id = db.Column(db.Integer, primary_key = True)
+    date_created = db.Column(db.DateTime, default=db.func.current_timestamp())
+    date_modified = db.Column(db.DateTime, default=db.func.current_timestamp(), onupdate=db.func.current_timestamp())
+
+
+"""
+Tabla que relaciona Proyectos y Contactos
+"""
+contactos = db.Table('contactos',
+                     db.Column('proyecto_id', db.Integer, db.ForeignKey('proyecto.id'), primary_key=True),
+                     db.Column('contacto_id', db.Integer, db.ForeignKey('contacto.id'), primary_key=True))
+
+"""
+Tabla que relaciones orígenes de datos (Fuentes) y Proyectos
+"""
+fuentes = db.Table('fuentes',
+                   db.Column('proyecto_id', db.Integer, db.ForeignKey('proyecto.id'), primary_key=True),
+                   db.Column('origen_id', db.Integer, db.ForeignKey('origen.id'), primary_key=True))
+
+"""    
 Define el modelo de Proyecto
 """
-class Proyecto():
-     
-    # Path del fichero json de proyectos
-    __fichero_proyectos = "/proyectos/proyectos.json"
-    # Todo proyecto tiene al menos un nombre que le identifique
-    __proyecto_key = ""
-    # Separamos el resto de parámetros para facilitar la modificacion del modelo
-    __proyecto_param = {}.fromkeys(["nombre_proy", "organismo", "contactos", "ficherofuentes", "diccionariodatos", "descripcion"], "")
-              
-    # Función de instanciación
-    def __init__(self, nombre_proyecto):
-        self ={__proyecto_key : nombre_proyecto}
-        self.update(__proyecto_param)
-        self["nombre_proy"] = nombre_proyecto
-        # Contactos es un array para poder incluir varios contactos
-        self[__proyecto_key]["contactos"] = []
-        
-    # Añade los datos de un contacto al proyecto            
-    def add_contacto(self, Contacto):
-            self["contactos"].append(Contacto)
+class Proyecto(Base):
     
-    # Busca un proyecto en el fichero json. Si no lo encuentra, crea uno nuevo
-    def buscar_proyecto(self, nombre_proyecto):
-        proyectos = abrir_fichero(__fichero_proyectos, "json")
-        if proyectos:
-            # El fichero contiene ya otros proyectos
-            # Buscamos el nuestro
-            for proyecto in proyectos:
-                if proyecto == nombre_proyecto:
-                    return proyecto_dic
-        else:
-            # El proyecto no existe en el fichero o bien el fichero estaba vacío
-            return Proyecto(nombre_proyecto)
-        
-
-    def guardar_proyecto(self):
-        proyectos = abrir_fichero(__fichero_proyectos, "json")
-        # Añadimos el proyecto a la lista de proyectos
-        # La clave es el nombre del proyecto y el valor el propio objeto proyecto
-        proyectos.update(self)
-        guardar_fichero(proyectos, __fichero_proyectos, "json")
-                      
+    # Datos del proyecto
+    nombre = db.Column(db.String(128), nullable=False, unique=True)
+    organismo = db.Column(db.String(256), nullable=False)
+    contactos = db.relationship('Contacto', secondary=contactos, lazy='subquery', backref=db.backref('proyectos', lazy=True))
+    fuentes = db.relationship('Fuente', secondary=fuentes, lazy='subquery', backref=db.backref('proyectos', lazy=True))
+    diccionariodatos = db.relationship('CampoDato', backref='proyecto', lazy=True)
+    descripcion = db.Column(db.Text, nullable=False)
+  
+#     # Añade los datos de un contacto al proyecto            
+#     def add_contacto(self, Contacto):
+#             self["contactos"].append(Contacto)
+#     
+#     # Busca un proyecto en el fichero json. Si no lo encuentra, crea uno nuevo
+#     def buscar_proyecto(self, nombre_proyecto):
+# 
+#     def guardar_proyecto(self):
+#                       
     def __repr__(self):
-        return '<Proyecto %r>' % (self.proyecto)  
+        return '<Proyecto %r>' % (self.nombre)  
 
 
 """ 
 Define el modelo de Contacto
 """
-class Contacto():
+class Contacto(Base):
 
-    # Todo contacto tiene al menos un nombre
-    __contacto = {"nombre":""}
-    # Separamos el resto de parámetros para facilitar la modificacion del modelo
-    __contacto_param = {}.fromkeys(["email", "telefono", "movil"], "")
-        
-    # Función de instanciación    
-    def __init__(self, nombre_contacto):
-        self.__contacto["nombre"] = "nombre_contacto" 
-        self.__contacto.update(contacto_param)
+    # Datos del contacto
+    nombre = db.Column(db.String(256), nullable=False)
+    email = db.Column(db.String(120))
+    telefono = db.Column(db.String(9))
+    movil = db.Column(db.String(9))
     
-    # Establecemos el resto de parametros del contacto
-    def setParams(self, dic_parametros):
-        for key in dic_parametros:
-            self.__contacto[key] = dic_parametros[key].value()
-    
-    # Encapsulamos para facilitar mantenimiento          
-    def getContactoParam(self, key):
-        return self.__contacto[key].value()
+#     # Función de instanciación
+#     def __init__(self, nombre=None, apellidos=None, email, telefono, movil):
+#         self.nombre = nombre
+#         self.apellidos = apellidos
+#         self.email = email
+#         self.telefono = telefono
+#         self.movil = movil
+#         proyecto_id = db.Column(db.Integer, db.ForeignKey('proyecto.id'))
         
     def __repr__(self):
         return '<Contacto %r>' % (self.nombre)
+
+"""
+Define el modelo de Origen de datos
+"""
+class Origen(Base):
+
+    # Propiedades del origen de datos
+    alias = db.Column(db.String(100), nullable=False)
+    url = db.Column(db.Text, nullable=False)
+    descripcion = db.Column(db.Text)
+    notas = db.Column(db.Text)
+    frecuencia = db.Column(db.Integer, nullable=False)
+    ultima = db.Column(db.DateTime)
+    validado = db.Column(db.Boolean)
+    diccionariodatos = db.relationship('CampoDato', backref='origen', lazy=True)
+    
+    def __repr__(self):
+        return '<Origen %r' % (self.alias)
+    
+"""
+Define el modelo CampoDato, cuyo conjunto conforma el diccionario de datos de un proyecto o un origen de datos
+"""
+class CampoDato(Base):
+    
+    # Propiedades de cada campo de datos
+    campo = db.Column(db.String(100), nullable=False)
+    descripcion = db.Column(db.Text)
+    dtype = db.Column(db.String(32))
+    iniciorango = db.Column(db.Integer)
+    finrango = db.Column(db.Integer)
+    notas = db.Column(db.Text)
